@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+</head>
+<body>
+    <h1>All Posts</h1>
+    <div>
+        <a href="/posts/new">New Post</a>
+    </div>
+    <ul>
+        <% for(let post of posts) {%>
+            <li><a href="/posts/<%= post._id %>"><%= post.body %></a></li>
+        <% } %>
+    </ul>
+</body>
+</html>
