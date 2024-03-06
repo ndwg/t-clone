@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
-</head>
-<body>
-    <h1>All Posts</h1>
-    <div>
-        <a href="/posts/new">New Post</a>
+<% layout('layouts/boilerplate') %>
+<div class="col-6 offset-3 mb-3">
+<h1>All Posts</h1>
+<div>
+    <a href="/posts/new">New Post</a>
+</div>
+<% for(let post of posts) {%>
+    <div class="card mb-1">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Card title</h5> -->
+          <p class="card-text"><%= post.body %></p>
+          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+        </div>
+        <% if(post.image) {%><img src="<%=post.image%>" class="card-img-bottom" alt="..."> <% } %>
+        <a href="/posts/<%= post._id %>" class="stretched-link"></a>
     </div>
-    <ul>
-        <% for(let post of posts) {%>
-            <li><a href="/posts/<%= post._id %>"><%= post.body %></a></li>
-        <% } %>
-    </ul>
-</body>
-</html>
+<% } %>
+</div>

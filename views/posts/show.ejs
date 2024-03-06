@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Show</title>
-</head>
-<body>
-    <h1><%= post.body %></h1>
-    <p>
-        <a href="/posts/<%= post._id %>/edit">Edit</a>
-    </p>
-    <p>
-        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-            <button>Delete</button>
+<% layout('layouts/boilerplate') %>
+<div class="col-6 offset-3">
+<div class="card mb-3">
+    <div class="card-body">
+      <!-- <h5 class="card-title">Card title</h5> -->
+      <p class="card-text"><%= post.body %></p>
+      <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+    </div>
+    <% if(post.image) {%><img src="<%=post.image%>" class="card-img-bottom" alt="..."> <% } %>
+    <div class="card-body">
+        <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit">Edit</a>
+        <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
         </form>
-    </p>
-    <footer>
-        <a href="/posts">All Posts</a>
-    </footer>
-</body>
-</html>
+    </div>
+    <div class="card-footer">
+        2 days ago
+    </div>
+</div>
+</div>
