@@ -33,7 +33,7 @@ router.post('/', validatePost, catchAsync(async (req,res,next) => {
 }));
 
 router.get('/:id', catchAsync(async (req,res) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('replies').populate('parent');
     res.render('posts/show', {post});
 }));
 
@@ -42,9 +42,28 @@ router.get('/:id/edit', catchAsync(async (req,res) => {
     res.render('posts/edit', {post});
 }));
 
+router.get('/:id/reply', catchAsync(async (req,res) => {
+    const post = await Post.findById(req.params.id);
+    res.render('posts/reply', {post});
+}));
+
 router.put('/:id', validatePost, catchAsync(async (req,res) => {
     const{id} = req.params;
     const post = await Post.findByIdAndUpdate(id, {...req.body.post});
+    res.redirect(`/posts/${post._id}`);
+}));
+
+router.post('/:id', validatePost, catchAsync(async (req,res,next) => {
+    //if(!req.body.post) throw new ExpressError('Invalid Post Data', 400);
+    
+    const parent = await Post.findById(req.params.id);
+    const post = new Post(req.body.post);
+    post.parent = parent.id;
+    parent.replies.push(post);
+    await post.save();
+    await parent.save();
+    //console.log(post);
+    //console.log(parent);
     res.redirect(`/posts/${post._id}`);
 }));
 

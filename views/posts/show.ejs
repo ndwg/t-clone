@@ -1,5 +1,16 @@
 <% layout('layouts/boilerplate') %>
 <div class="col-6 offset-3">
+<% if(post.parent){%>
+    <div class="card mb-1">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Card title</h5> -->
+          <p class="card-text"><%= post.parent.body %></p>
+          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+        </div>
+        <% if(post.parent.image) {%><img src="<%=post.parent.image%>" class="card-img-bottom" alt="..."> <% } %>
+        <a href="/posts/<%= post.parent._id %>" class="stretched-link"></a>
+    </div>
+<% } %>
 <div class="card mb-3">
     <div class="card-body">
       <!-- <h5 class="card-title">Card title</h5> -->
@@ -8,6 +19,7 @@
     </div>
     <% if(post.image) {%><img src="<%=post.image%>" class="card-img-bottom" alt="..."> <% } %>
     <div class="card-body">
+        <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply">Reply</a>
         <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit">Edit</a>
         <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
             <button class="btn btn-danger">Delete</button>
@@ -17,4 +29,15 @@
         2 days ago
     </div>
 </div>
+<% for(let reply of post.replies) {%>
+    <div class="card mb-1">
+        <div class="card-body">
+          <!-- <h5 class="card-title">Card title</h5> -->
+          <p class="card-text"><%= reply.body %></p>
+          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+        </div>
+        <% if(reply.image) {%><img src="<%=reply.image%>" class="card-img-bottom" alt="..."> <% } %>
+        <a href="/posts/<%= reply._id %>" class="stretched-link"></a>
+    </div>
+    <% } %>
 </div>
