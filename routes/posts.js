@@ -26,19 +26,27 @@ router.get('/new', (req,res) => {
 
 router.post('/', validatePost, catchAsync(async (req,res,next) => {
     //if(!req.body.post) throw new ExpressError('Invalid Post Data', 400);
-    
     const post = new Post(req.body.post);
     await post.save();
+    req.flash('success','Successfully made a new post!');
     res.redirect(`/posts/${post._id}`);
 }));
 
 router.get('/:id', catchAsync(async (req,res) => {
     const post = await Post.findById(req.params.id).populate('replies').populate('parent');
+    if(!post){
+        req.flash('error','Cannot find that post!');
+        return res.redirect('/posts');
+    }
     res.render('posts/show', {post});
 }));
 
 router.get('/:id/edit', catchAsync(async (req,res) => {
     const post = await Post.findById(req.params.id);
+    if(!post){
+        req.flash('error','Cannot find that post!');
+        return res.redirect('/posts');
+    }
     res.render('posts/edit', {post});
 }));
 
@@ -50,6 +58,7 @@ router.get('/:id/reply', catchAsync(async (req,res) => {
 router.put('/:id', validatePost, catchAsync(async (req,res) => {
     const{id} = req.params;
     const post = await Post.findByIdAndUpdate(id, {...req.body.post});
+    req.flash('success','Successfully updated post!');
     res.redirect(`/posts/${post._id}`);
 }));
 
@@ -62,14 +71,14 @@ router.post('/:id', validatePost, catchAsync(async (req,res,next) => {
     parent.replies.push(post);
     await post.save();
     await parent.save();
-    //console.log(post);
-    //console.log(parent);
+    req.flash('success','Successfully made a new reply!');
     res.redirect(`/posts/${post._id}`);
 }));
 
 router.delete('/:id', catchAsync(async (req,res) =>{
     const{id} = req.params;
     await Post.findByIdAndDelete(id);
+    req.flash('success','Successfully deleted post!');
     res.redirect('/posts');
 }));
 
