@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const{postSchema} = require('../schemas');
+const {isLoggedIn} = require('../middleware');
+
 const ExpressError = require('../utils/ExpressError');
 const Post = require('../models/post');
 
@@ -20,11 +22,11 @@ router.get('/', catchAsync(async (req,res) => {
     res.render('posts/index', {posts});
 }));
 
-router.get('/new', (req,res) => {
+router.get('/new', isLoggedIn, (req,res) => {
     res.render('posts/new');
 });
 
-router.post('/', validatePost, catchAsync(async (req,res,next) => {
+router.post('/', isLoggedIn, validatePost, catchAsync(async (req,res,next) => {
     //if(!req.body.post) throw new ExpressError('Invalid Post Data', 400);
     const post = new Post(req.body.post);
     await post.save();
@@ -41,7 +43,7 @@ router.get('/:id', catchAsync(async (req,res) => {
     res.render('posts/show', {post});
 }));
 
-router.get('/:id/edit', catchAsync(async (req,res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req,res) => {
     const post = await Post.findById(req.params.id);
     if(!post){
         req.flash('error','Cannot find that post!');
@@ -50,19 +52,19 @@ router.get('/:id/edit', catchAsync(async (req,res) => {
     res.render('posts/edit', {post});
 }));
 
-router.get('/:id/reply', catchAsync(async (req,res) => {
+router.get('/:id/reply', isLoggedIn, catchAsync(async (req,res) => {
     const post = await Post.findById(req.params.id);
     res.render('posts/reply', {post});
 }));
 
-router.put('/:id', validatePost, catchAsync(async (req,res) => {
+router.put('/:id', validatePost, isLoggedIn, catchAsync(async (req,res) => {
     const{id} = req.params;
     const post = await Post.findByIdAndUpdate(id, {...req.body.post});
     req.flash('success','Successfully updated post!');
     res.redirect(`/posts/${post._id}`);
 }));
 
-router.post('/:id', validatePost, catchAsync(async (req,res,next) => {
+router.post('/:id', isLoggedIn, validatePost, catchAsync(async (req,res,next) => {
     //if(!req.body.post) throw new ExpressError('Invalid Post Data', 400);
     
     const parent = await Post.findById(req.params.id);
@@ -75,7 +77,7 @@ router.post('/:id', validatePost, catchAsync(async (req,res,next) => {
     res.redirect(`/posts/${post._id}`);
 }));
 
-router.delete('/:id', catchAsync(async (req,res) =>{
+router.delete('/:id', isLoggedIn, catchAsync(async (req,res) =>{
     const{id} = req.params;
     await Post.findByIdAndDelete(id);
     req.flash('success','Successfully deleted post!');
