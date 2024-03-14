@@ -4,6 +4,7 @@
     <div class="card mb-1">
         <div class="card-body">
           <!-- <h5 class="card-title">Card title</h5> -->
+          <p class="card-text"><%= post.parent.author.username %></p>
           <p class="card-text"><%= post.parent.body %></p>
           <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
         </div>
@@ -14,16 +15,21 @@
 <div class="card mb-3">
     <div class="card-body">
       <!-- <h5 class="card-title">Card title</h5> -->
+      <p class="card-text"><%= post.author.username %></p>
       <p class="card-text"><%= post.body %></p>
       <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
     </div>
     <% if(post.image) {%><img src="<%=post.image%>" class="card-img-bottom" alt="..."> <% } %>
     <div class="card-body">
         <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply">Reply</a>
-        <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit">Edit</a>
-        <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-            <button class="btn btn-danger">Delete</button>
-        </form>
+        <% if(currentUser && post.author.equals(currentUser._id)){ %>
+        <div class="d-inline">
+            <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit">Edit</a>
+            <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        <% } %>
     </div>
     <div class="card-footer">
         2 days ago
@@ -33,6 +39,7 @@
     <div class="card mb-1">
         <div class="card-body">
           <!-- <h5 class="card-title">Card title</h5> -->
+          <p class="card-text"><%= reply.author.username %></p>
           <p class="card-text"><%= reply.body %></p>
           <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
         </div>
