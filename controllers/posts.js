@@ -11,6 +11,7 @@ module.exports.renderNewPost = (req,res) => {
 
 module.exports.createPost = async (req,res,next) => {
     const post = new Post(req.body.post);
+    post.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.author = req.user._id;
     await post.save();
     req.flash('success','Successfully made a new post!');
@@ -56,6 +57,7 @@ module.exports.updatePost = async (req,res) => {
 module.exports.createReply = async (req,res,next) => {
     const parent = await Post.findById(req.params.id);
     const post = new Post(req.body.post);
+    post.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.parent = parent.id;
     parent.replies.push(post);
     post.author = req.user._id;
