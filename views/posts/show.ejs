@@ -19,9 +19,29 @@
       <p class="card-text"><%= post.body %></p>
       <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
     </div>
-    <% if(post.images) { for(let img of post.images){%>
-        <img src="<%=img.url%>" class="card-img-bottom" alt="..."> 
-    <% }} %>
+    
+    <div id="postCarousel" class="carousel slide" data-bs-theme="dark">
+        <div class="carousel-inner">
+            <% post.images.forEach((img, i)=> { %>
+                <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                    <img src="<%= img.url%>" class="d-block m-auto rounded img-fluid" alt="">
+                </div>
+                <% }) %>
+        </div>
+        <% if(post.images.length> 1) { %>
+            <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#postCarousel"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            <% } %>
+    </div> 
+
     <div class="card-body">
         <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply">Reply</a>
         <% if(currentUser && post.author.equals(currentUser._id)){ %>

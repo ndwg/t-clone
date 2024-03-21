@@ -50,6 +50,9 @@ module.exports.renderNewReply = async (req,res) => {
 module.exports.updatePost = async (req,res) => {
     const{id} = req.params;
     const post = await Post.findByIdAndUpdate(id, {...req.body.post});
+    const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
+    post.images.push(...imgs);
+    await post.save();
     req.flash('success','Successfully updated post!');
     res.redirect(`/posts/${post._id}`);
 }

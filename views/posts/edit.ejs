@@ -2,10 +2,14 @@
 <div class="row">
     <h1 class="text-center">Edit Post</h1>
     <div class="col-6 offset-3">
-        <form action="/posts/<%= post._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+        <form action="/posts/<%= post._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="body">Post</label>
                 <textarea class="form-control" type="text" id="body" name="post[body]" required><%= post.body %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="images" class="form-label">Add Images</label>
+                <input class="form-control form-control-sm" id="images" type="file" name="images" multiple>
             </div>
             <div class="mb-3">
                 <button class="btn btn-info">Update</button>
