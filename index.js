@@ -17,6 +17,7 @@ const User = require('./models/user');
 
 const postRoutes = require('./routes/posts');
 const userRoutes = require('./routes/users');
+const profileRoutes = require('./routes/profiles');
 
 mongoose.connect('mongodb://127.0.0.1:27017/t-clone');
 
@@ -64,6 +65,7 @@ app.use((req,res,next)=>{
 })
 
 app.use('/posts', postRoutes);
+app.use('/users', profileRoutes);
 app.use('/', userRoutes);
 
 app.get('/', (req, res) => {

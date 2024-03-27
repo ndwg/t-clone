@@ -7,7 +7,15 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    bio: String,
+    location: String,
+    posts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Post'
+        }
+    ]
 });
 
 UserSchema.plugin(passportLocalMongoose);

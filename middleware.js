@@ -1,6 +1,7 @@
 const{postSchema} = require('./schemas');
 const ExpressError = require('./utils/ExpressError');
 const Post = require('./models/post');
+const User = require('./models/user');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()){
@@ -34,6 +35,16 @@ module.exports.isAuthor = async(req,res,next) => {
     if(!post.author.equals(req.user._id)){
         req.flash('error', 'You do no have permission to do that!')
         return res.redirect(`/posts/${id}`);
+    }
+    next();
+};
+
+module.exports.isProfile = async(req,res,next) => {
+    const {id} = req.params;
+    const profile = await User.findById(id);
+    if(!profile.equals(req.user._id)){
+        req.flash('error', 'You do no have permission to do that!')
+        return res.redirect(`/users/${id}`);
     }
     next();
 };

@@ -1,0 +1,9 @@
+<% layout('layouts/boilerplate') %>
+<h2><%= profile.username %></h2>
+<h3><%= profile.location %></h3>
+<h3><%= profile.bio %></h3>
+<% if(currentUser && profile.equals(currentUser._id)){ %>
+    <div class="d-inline">
+        <a class="card-link btn btn-info" href="/users/<%= profile._id %>/edit">Edit Profile</a>
+    </div>
+    <% } %>
