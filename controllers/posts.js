@@ -7,13 +7,17 @@ module.exports.index = async (req,res) => {
 
 module.exports.renderNewPost = (req,res) => {
     res.render('posts/new');
+    //console.log(req.user.posts);
 }
 
 module.exports.createPost = async (req,res,next) => {
     const post = new Post(req.body.post);
+    const profile = req.user;
     post.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.author = req.user._id;
+    profile.posts.push(post);
     await post.save();
+    await profile.save();
     req.flash('success','Successfully made a new post!');
     res.redirect(`/posts/${post._id}`);
 }
@@ -60,18 +64,23 @@ module.exports.updatePost = async (req,res) => {
 module.exports.createReply = async (req,res,next) => {
     const parent = await Post.findById(req.params.id);
     const post = new Post(req.body.post);
+    const profile = req.user;
     post.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.parent = parent.id;
     parent.replies.push(post);
     post.author = req.user._id;
+    profile.posts.push(post);
     await post.save();
     await parent.save();
+    await profile.save();
     req.flash('success','Successfully made a new reply!');
     res.redirect(`/posts/${post._id}`);
 }
 
 module.exports.deletePost = async (req,res) =>{
     const{id} = req.params;
+    //const profile = req.user;
+    //await profile.posts.
     await Post.findByIdAndDelete(id);
     req.flash('success','Successfully deleted post!');
     res.redirect('/posts');
