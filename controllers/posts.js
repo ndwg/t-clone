@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req,res) => {
     const posts = await Post.find({}).populate('author');
@@ -7,7 +8,6 @@ module.exports.index = async (req,res) => {
 
 module.exports.renderNewPost = (req,res) => {
     res.render('posts/new');
-    //console.log(req.user.posts);
 }
 
 module.exports.createPost = async (req,res,next) => {
@@ -57,6 +57,12 @@ module.exports.updatePost = async (req,res) => {
     const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.images.push(...imgs);
     await post.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await post.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
+    }
     req.flash('success','Successfully updated post!');
     res.redirect(`/posts/${post._id}`);
 }
@@ -79,9 +85,12 @@ module.exports.createReply = async (req,res,next) => {
 
 module.exports.deletePost = async (req,res) =>{
     const{id} = req.params;
-    //const profile = req.user;
-    //await profile.posts.
+    const profile = req.user;
+
+    profile.posts = profile.posts.filter((p) => p._id.toHexString() != id);
+
     await Post.findByIdAndDelete(id);
+    await profile.save();
     req.flash('success','Successfully deleted post!');
     res.redirect('/posts');
 }
