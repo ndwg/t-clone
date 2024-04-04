@@ -3,21 +3,44 @@
 <% if(post.parent){%>
     <div class="card mb-1">
         <div class="card-body">
-          <!-- <h5 class="card-title">Card title</h5> -->
-          <p class="card-text" style="z-index: 2; position: relative;"> <a href="/users/<%= post.parent.author._id %>"><%= post.parent.author.username %></a> </p>
-          <p class="card-text"><%= post.parent.body %></p>
-          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+          <p class="card-text"> 
+            <a href="/users/<%= post.parent.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
+                <img src="<%= post.parent.author.pfp.url %>" alt="" style="
+                    width: 2em;
+                    height: 2em;
+                    border-radius: 50%;">
+                 <%= post.parent.author.username %>
+            </a> 
+        </p>
+          <p class="card-text" style="white-space: pre-line;"><%= post.parent.body %></p>
         </div>
+
         <% if(post.parent.image) {%><img src="<%=post.parent.image%>" class="card-img-bottom" alt="..."> <% } %>
+        <div class="card-footer">
+            posted on <%= post.parent.createdAt.toLocaleString() %>
+        </div>
         <a href="/posts/<%= post.parent._id %>" class="stretched-link"></a>
     </div>
+<% } else if(post.parent === undefined){} else if(post.parent === null){%>
+    <div class="card mb-1 text-bg-danger">
+        <div class="card-body">
+          <p class="card-text text-center">Original Post Not Found</p>
+        </div>
+    </div>
 <% } %>
+
 <div class="card mb-3">
     <div class="card-body">
-      <!-- <h5 class="card-title">Card title</h5> -->
-      <p class="card-text"> <a href="/users/<%= post.author._id %>"><%= post.author.username %></a> </p>
-      <p class="card-text"><%= post.body %></p>
-      <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+      <p class="card-text"> 
+        <a href="/users/<%= post.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
+            <img src="<%= post.author.pfp.url %>" alt="" style="
+                width: 2em;
+                height: 2em;
+                border-radius: 50%;">
+             <%= post.author.username %>
+        </a> 
+    </p>
+      <p class="card-text" style="white-space: pre-line;"><%= post.body %></p>
     </div>
     
     <div id="postCarousel" class="carousel slide" data-bs-theme="dark">
@@ -43,29 +66,39 @@
     </div> 
 
     <div class="card-body">
-        <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply">Reply</a>
+        <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply" style="z-index: 2; position: relative;"><i class="bi bi-chat"></i></i></a>
         <% if(currentUser && post.author.equals(currentUser._id)){ %>
         <div class="d-inline">
-            <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit">Edit</a>
+            <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit" style="z-index: 2; position: relative;"><i class="bi bi-pencil-square"></i></a>
             <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger" style="z-index: 2; position: relative;"><i class="bi bi-trash3"></i></button>
             </form>
         </div>
         <% } %>
     </div>
     <div class="card-footer">
-        2 days ago
+        posted on <%= post.createdAt.toLocaleString() %>
     </div>
 </div>
 <% for(let reply of post.replies) {%>
     <div class="card mb-1">
         <div class="card-body">
-          <!-- <h5 class="card-title">Card title</h5> -->
-          <p class="card-text" style="z-index: 2; position: relative;"> <a href="/users/<%= reply.author._id %>"><%= reply.author.username %></a> </p>
-          <p class="card-text"><%= reply.body %></p>
-          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
+          <p class="card-text"> 
+            <a href="/users/<%= reply.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
+                <img src="<%= reply.author.pfp.url %>" alt="" style="
+                    width: 2em;
+                    height: 2em;
+                    border-radius: 50%;">
+                 <%= reply.author.username %>
+            </a> 
+        </p>
+          <p class="card-text" style="white-space: pre-line;"><%= reply.body %></p>
+          
         </div>
         <% if(reply.image) {%><img src="<%=reply.image%>" class="card-img-bottom" alt="..."> <% } %>
+        <div class="card-footer">
+            posted on <%= reply.createdAt.toLocaleString() %>
+        </div>
         <a href="/posts/<%= reply._id %>" class="stretched-link"></a>
     </div>
     <% } %>

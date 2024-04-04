@@ -1,4 +1,4 @@
-<nav class="navbar sticky-top navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+<nav class="navbar sticky-sm-top navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">T-Clone</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,6 +15,14 @@
           <a href="/login" class="nav-link">Login</a>
           <a href="/register" class="nav-link">Register</a>
           <% }else{ %>
+          <a href="/users/<%= currentUser._id %>" style="z-index: 2; position: relative; text-decoration: none;" class="nav-link">
+              <img src="<%= currentUser.pfp.url %>" alt="" style="
+                  width: 1.5em;
+                  height: 1.5em;
+                  border-radius: 50%;">
+               <%= currentUser.username %>
+          </a>
+          <a href="/chats" class="nav-link"><i class="bi bi-chat-right-dots"></i></a>
           <a href="/logout" class="nav-link">Logout</a>
           <% } %>
         </div>

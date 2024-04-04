@@ -1,7 +1,20 @@
 <% layout('layouts/boilerplate') %>
+<div class="mb-3" style="display: flex;">
+<img src="<%= profile.pfp.url %>" alt="" style="
+                    width: 9em;
+                    height: 9em;
+                    border-radius: 50%;
+                    display: inline;
+                    vertical-align: middle;
+                    margin-right: 1em;">
+
+<span style="display: inline-block;">
 <h1><%= profile.username %></h1>
 <% if(profile.location){ %> <h5><i class="bi bi-pin-map"></i> <%= profile.location %></h5> <% } %>
 <h5><%= profile.bio %></h5>
+</span>
+</div>
+
 <% if(currentUser && profile.equals(currentUser._id)){ %>
     <div class="d-inline">
         <a class="card-link btn btn-info" href="/users/<%= profile._id %>/edit"><i class="bi bi-person-gear"></i> Edit Profile</a>
@@ -16,11 +29,10 @@
           <!-- <h5 class="card-title">Card title</h5> -->
           <p class="card-text"> 
             <a href="/users/<%= post.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
-                <% if(post.author.pfp) {%> <img src="<%= post.author.pfp.url %>" alt="" style="
+                <img src="<%= post.author.pfp.url %>" alt="" style="
                     width: 2em;
                     height: 2em;
-                    border-radius: 50%;
-                    "> <% } %>
+                    border-radius: 50%;">
                  <%= post.author.username %>
             </a> 
         </p>

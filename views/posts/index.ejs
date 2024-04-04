@@ -7,19 +7,16 @@
 <% for(let post of posts) {%>
     <div class="card mb-3">
         <div class="card-body">
-          <!-- <h5 class="card-title">Card title</h5> -->
           <p class="card-text"> 
             <a href="/users/<%= post.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
-                <% if(post.author.pfp) {%> <img src="<%= post.author.pfp.url %>" alt="" style="
+                <img src="<%= post.author.pfp.url %>" alt="" style="
                     width: 2em;
                     height: 2em;
-                    border-radius: 50%;
-                    "> <% } %>
+                    border-radius: 50%;">
                  <%= post.author.username %>
             </a> 
         </p>
           <p class="card-text" style="white-space: pre-line;"><%= post.body %></p>
-          <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
         </div>
         
         <div id="postCarousel" class="carousel slide" data-bs-theme="dark">
