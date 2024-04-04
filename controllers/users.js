@@ -7,7 +7,12 @@ module.exports.renderRegister = (req,res) => {
 module.exports.register = async (req,res) => {
     try{
         const {email, username, password} = req.body;
-        const user = new User({email, username});
+        const user = new User({email, username, 
+            pfp:{
+                url: 'https://res.cloudinary.com/dcgrlgof8/image/upload/v1712183302/T-Clone/huyoh7fmjdwwzmyqrqja.png',
+                filename: 'T-Clone/huyoh7fmjdwwzmyqrqja'
+            }
+        });
         const registeredUser = await User.register(user,password);
         req.login(registeredUser, err=>{
             if(err) return next(err);

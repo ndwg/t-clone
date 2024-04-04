@@ -5,14 +5,59 @@
     <a href="/posts/new">New Post</a>
 </div>
 <% for(let post of posts) {%>
-    <div class="card mb-1">
+    <div class="card mb-3">
         <div class="card-body">
           <!-- <h5 class="card-title">Card title</h5> -->
-          <p class="card-text"><%= post.author.username %></p>
-          <p class="card-text"><%= post.body %></p>
+          <p class="card-text"> 
+            <a href="/users/<%= post.author._id %>" style="z-index: 2; position: relative; text-decoration: none;">
+                <% if(post.author.pfp) {%> <img src="<%= post.author.pfp.url %>" alt="" style="
+                    width: 2em;
+                    height: 2em;
+                    border-radius: 50%;
+                    "> <% } %>
+                 <%= post.author.username %>
+            </a> 
+        </p>
+          <p class="card-text" style="white-space: pre-line;"><%= post.body %></p>
           <!-- <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p> -->
         </div>
-        <% if(post.image) {%><img src="<%=post.image%>" class="card-img-bottom" alt="..."> <% } %>
+        
+        <div id="postCarousel" class="carousel slide" data-bs-theme="dark">
+            <div class="carousel-inner">
+                <% post.images.forEach((img, i)=> { %>
+                    <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                        <img src="<%= img.url%>" class="d-block m-auto rounded img-fluid" alt="">
+                    </div>
+                    <% }) %>
+            </div>
+            <% if(post.images.length> 1) { %>
+                <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#postCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                <% } %>
+        </div> 
+    
+        <div class="card-body">
+            <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply" style="z-index: 2; position: relative;"><i class="bi bi-chat"></i></i></a>
+            <% if(currentUser && post.author.equals(currentUser._id)){ %>
+            <div class="d-inline">
+                <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit" style="z-index: 2; position: relative;"><i class="bi bi-pencil-square"></i></a>
+                <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" style="z-index: 2; position: relative;"><i class="bi bi-trash3"></i></button>
+                </form>
+            </div>
+            <% } %>
+        </div>
+        <div class="card-footer">
+            posted on <%= post.createdAt.toLocaleString() %>
+        </div>
         <a href="/posts/<%= post._id %>" class="stretched-link"></a>
     </div>
 <% } %>

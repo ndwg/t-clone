@@ -24,8 +24,10 @@ module.exports.renderNewEdit = async (req,res) => {
 module.exports.updateProfile = async (req,res) => {
     const{id} = req.params;
     const profile = await User.findByIdAndUpdate(id, {...req.body.user});
-    /*const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
-    profile.images.push(...imgs);*/
+    profile.pfp = {
+        url: req.file.path,
+        filename: req.file.filename
+    };
     await profile.save();
     req.flash('success','Successfully updated profile!');
     res.redirect(`/users/${profile._id}`);

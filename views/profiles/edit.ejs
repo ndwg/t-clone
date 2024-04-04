@@ -2,7 +2,11 @@
 <div class="row">
     <h1 class="text-center">Edit <%= profile.username %>'s profile</h1>
     <div class="col-6 offset-3">
-        <form action="/users/<%= profile._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="application/x-www-form-urlencoded">
+        <form action="/users/<%= profile._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="pfp" class="form-label">Profile Picture</label>
+                <input class="form-control form-control-sm" id="pfp" type="file" name="pfp">
+            </div>
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type="text" id="location" name="user[location]"
