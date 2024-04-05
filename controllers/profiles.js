@@ -32,3 +32,36 @@ module.exports.updateProfile = async (req,res) => {
     req.flash('success','Successfully updated profile!');
     res.redirect(`/users/${profile._id}`);
 }
+
+module.exports.follow = async (req,res) =>{
+    const{id} = req.params;
+    const currentUser = req.user;
+    const profile = await User.findById(id);
+    let flag = true;
+
+    for(let i = 0; i < currentUser.following.length; i++){
+        if(currentUser.following[i]._id.toHexString()===profile._id.toHexString()){
+            currentUser.following.splice(i,1);
+            flag = false;
+            for(let j = 0; j < profile.followers.length; j++){
+                if(profile.followers[j]._id.toHexString()===currentUser._id.toHexString()){
+                    profile.followers.splice(j,1);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    if(flag){
+        currentUser.following.push(profile);
+        profile.followers.push(currentUser);
+    }
+
+    console.log(profile);
+    console.log(currentUser);
+
+    await profile.save();
+    await currentUser.save();
+    res.redirect(`/users/${profile._id}`);
+}

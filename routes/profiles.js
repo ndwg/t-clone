@@ -13,4 +13,6 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isProfile, catchAsync(profiles.renderNewEdit));
 
+router.get('/:id/follow', isLoggedIn, catchAsync(profiles.follow));
+
 module.exports = router;
