@@ -84,12 +84,18 @@ module.exports.createReply = async (req,res,next) => {
 }
 
 module.exports.deletePost = async (req,res) =>{
-    const{id} = req.params;
+    const post = await Post.findById(req.params.id);
     const profile = req.user;
 
-    profile.posts = profile.posts.filter((p) => p._id.toHexString() != id);
+    profile.posts = profile.posts.filter((p) => p._id.toHexString() != req.params.id);
 
-    await Post.findByIdAndDelete(id);
+    if (post.images) {
+        for (let file of post.images) {
+            await cloudinary.uploader.destroy(file.filename);
+        }
+    }
+
+    await Post.deleteOne(post);
     await profile.save();
     req.flash('success','Successfully deleted post!');
     res.redirect('/posts');

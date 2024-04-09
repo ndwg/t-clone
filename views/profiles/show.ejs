@@ -22,9 +22,13 @@
     <div class="d-inline">
         <a class="card-link btn btn-info" href="/users/<%= profile._id %>/edit"><i class="bi bi-person-gear"></i> Edit Profile</a>
     </div>
+<% } else if(currentUser && currentUser.following.some(p => p._id.toHexString() === profile._id.toHexString())){ %>
+    <div class="d-inline">
+        <a class="card-link btn btn-info" href="/users/<%= profile._id %>/follow"><i class="bi bi-person-dash"></i> Unfollow</a>
+    </div>
 <% } else if(currentUser){ %>
     <div class="d-inline">
-        <a class="card-link btn btn-info" href="/users/<%= profile._id %>/follow"><i class="bi bi-person-add"></i></i> Follow</a>
+        <a class="card-link btn btn-info" href="/users/<%= profile._id %>/follow"><i class="bi bi-person-add"></i> Follow</a>
     </div>
 <% } %>
 
