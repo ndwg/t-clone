@@ -26,7 +26,8 @@ const PostSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Post'
         }
-    ]
+    ],
+    likes: Number
     },
     {timestamps: true}
 );

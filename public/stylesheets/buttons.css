@@ -1,0 +1,15 @@
+.btn-heart{
+    background-color: palevioletred; 
+    border-color: palevioletred;
+    color: white;
+}
+.btn-heart:hover{
+    background-color: mediumvioletred;
+    border-color: mediumvioletred;
+    color: white;
+}
+.btn-heart:active:hover{
+    background-color: deeppink;
+    border-color: deeppink;
+    color: gold;
+}

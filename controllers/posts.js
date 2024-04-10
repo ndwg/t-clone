@@ -16,6 +16,7 @@ module.exports.createPost = async (req,res,next) => {
     post.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     post.author = req.user._id;
     profile.posts.push(post);
+    post.likes = 0;
     await post.save();
     await profile.save();
     req.flash('success','Successfully made a new post!');
@@ -76,6 +77,7 @@ module.exports.createReply = async (req,res,next) => {
     parent.replies.push(post);
     post.author = req.user._id;
     profile.posts.push(post);
+    post.likes = 0;
     await post.save();
     await parent.save();
     await profile.save();
@@ -99,4 +101,25 @@ module.exports.deletePost = async (req,res) =>{
     await profile.save();
     req.flash('success','Successfully deleted post!');
     res.redirect('/posts');
+}
+
+module.exports.like = async (req,res) =>{
+    const{id} = req.params;
+    const currentUser = req.user;
+    const post = await Post.findById(id);
+
+    const i = currentUser.likes.findIndex(p => p._id.toHexString() === post._id.toHexString());
+
+    if(i > -1){
+        currentUser.likes.splice(i,1);
+        post.likes--;
+    }
+    else{
+        currentUser.likes.push(post);
+        post.likes++;
+    }
+
+    await post.save();
+    await currentUser.save();
+    res.redirect(`/posts/${post._id}`);
 }

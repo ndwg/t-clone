@@ -66,7 +66,10 @@
     </div> 
 
     <div class="card-body">
-        <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply" style="z-index: 2; position: relative;"><i class="bi bi-chat"></i></i></a>
+        <a class="card-link btn btn-heart" href="/posts/<%= post._id %>/like" style="z-index: 2; position: relative;"><i class="bi bi-heart"></i> <%= post.likes %></a>
+        <div class="d-inline">
+            <a class="card-link btn btn-primary" href="/posts/<%= post._id %>/reply" style="z-index: 2; position: relative;"><i class="bi bi-chat"></i></a>
+        </div>
         <% if(currentUser && post.author.equals(currentUser._id)){ %>
         <div class="d-inline">
             <a class="card-link btn btn-info" href="/posts/<%= post._id %>/edit" style="z-index: 2; position: relative;"><i class="bi bi-pencil-square"></i></a>

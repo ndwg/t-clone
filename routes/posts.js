@@ -25,4 +25,6 @@ router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(posts.renderNewEdit));
 
 router.get('/:id/reply', isLoggedIn, catchAsync(posts.renderNewReply));
 
+router.get('/:id/like', isLoggedIn, catchAsync(posts.like));
+
 module.exports = router;
