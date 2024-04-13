@@ -54,3 +54,33 @@ module.exports.follow = async (req,res) =>{
     await currentUser.save();
     res.redirect(`/users/${profile._id}`);
 }
+
+module.exports.renderLikes = async (req,res) => {
+    const profile = await User.findById(req.params.id).populate({
+        path: 'likes',
+        populate: {path: 'author'}
+    });
+    if(!profile){
+        req.flash('error','Cannot find that user!');
+        return res.redirect('/posts');
+    }
+    res.render('profiles/likes', {profile});
+}
+
+module.exports.renderFollowers = async (req,res) => {
+    const profile = await User.findById(req.params.id).populate('followers');
+    if(!profile){
+        req.flash('error','Cannot find that user!');
+        return res.redirect('/posts');
+    }
+    res.render('profiles/followers', {profile});
+}
+
+module.exports.renderFollowing = async (req,res) => {
+    const profile = await User.findById(req.params.id).populate('following');
+    if(!profile){
+        req.flash('error','Cannot find that user!');
+        return res.redirect('/posts');
+    }
+    res.render('profiles/following', {profile});
+}

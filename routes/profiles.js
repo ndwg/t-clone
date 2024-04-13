@@ -15,4 +15,10 @@ router.get('/:id/edit', isLoggedIn, isProfile, catchAsync(profiles.renderNewEdit
 
 router.get('/:id/follow', isLoggedIn, catchAsync(profiles.follow));
 
+router.get('/:id/likes', isLoggedIn, catchAsync(profiles.renderLikes));
+
+router.get('/:id/followers', isLoggedIn, catchAsync(profiles.renderFollowers));
+
+router.get('/:id/following', isLoggedIn, catchAsync(profiles.renderFollowing));
+
 module.exports = router;
